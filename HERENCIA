@@ -1,0 +1,261 @@
+clase 1
+namespace Concesionario
+{
+    class Automovil: IVehiculo
+    {
+        private string strMarca;
+        private int intCilindraje;
+        private string strModelo;        
+        private string strDescripcion;
+        private int intNumPuertas;
+        private int intNumPasajeros;
+        
+        public int Cilindraje
+        {
+            get { return intCilindraje; }
+            set { intCilindraje = value; }
+        }
+        public string Modelo
+        {
+            get { return strModelo; }
+            set { strModelo = value; }
+        }
+        public string Marca
+        {
+            get { return strModelo; }
+            set { strModelo = value; }
+        }
+        public string Descripcion
+        {
+            get { return strDescripcion; }
+            set { strDescripcion = value; }
+        }
+        public int NumPuertas
+        {
+            get { return intNumPuertas; }
+            set { intNumPuertas = value; }
+        }
+        public int NumPasajeros
+        {
+            get { return intNumPasajeros; }
+            set { intNumPasajeros = value; }
+        }
+
+        public string Describir() { 
+            string strResultado;
+            strResultado= "MARCA: " + Marca;
+            strResultado+= System.Environment.NewLine + "CILINDRAJE: " + Cilindraje;
+            strResultado += System.Environment.NewLine + "MODELO: " + Modelo;
+            strResultado += System.Environment.NewLine + "NUMERO PUERTAS: " + NumPuertas;
+            strResultado += System.Environment.NewLine + "NUMERO PASAJEROS: " + NumPasajeros;
+            strResultado += System.Environment.NewLine + "DESCRIPCION: " + Descripcion;
+            return strResultado;
+        }
+
+        public bool Inicializar(Object[] parametros) {
+            try
+            {
+                Marca = (String)parametros[0];
+                Cilindraje = Convert.ToInt16(parametros[1]);
+                Modelo = (String)parametros[2];
+                Descripcion = (String)parametros[3];
+                NumPuertas = Convert.ToInt16(parametros[4]);
+                NumPasajeros = Convert.ToInt16(parametros[5]);
+            }catch(Exception ex){
+                return false;
+            }
+            return true;
+        }
+    }
+}
+
+clase 2
+namespace Concesionario
+{
+    class Camion : IVehiculo
+    {
+        private string strMarca;
+        private int intCilindraje;
+        private string strModelo;
+        private string strDescripcion;
+        private int intTonCapacidad;
+        private int intNumEjes;
+
+        public int Cilindraje
+        {
+            get { return intCilindraje; }
+            set { intCilindraje = value; }
+        }
+        public string Modelo
+        {
+            get { return strModelo; }
+            set { strModelo = value; }
+        }
+        public string Marca
+        {
+            get { return strMarca; }
+            set { strMarca = value; }
+        }
+        public string Descripcion
+        {
+            get { return strDescripcion; }
+            set { strDescripcion = value; }
+        }
+        public int TonCapacidad
+        {
+            get { return intTonCapacidad; }
+            set { intTonCapacidad = value; }
+        }
+        public int NumEjes
+        {
+            get { return intNumEjes; }
+            set { intNumEjes = value; }
+        }
+
+        public string Describir()
+        {
+            string strResultado;
+            strResultado = "MARCA: " + Marca;
+            strResultado += System.Environment.NewLine + "CILINDRAJE: " + Cilindraje;
+            strResultado += System.Environment.NewLine + "MODELO: " + Modelo;
+            strResultado += System.Environment.NewLine + "CAPACIDAD: " + TonCapacidad + "Ton";
+            strResultado += System.Environment.NewLine + "NUMERO EJES: " + NumEjes;
+            strResultado += System.Environment.NewLine + "DESCRIPCION: " + Descripcion;
+            return strResultado;
+        }
+
+        public bool Inicializar(Object[] parametros)
+        {
+            try
+            {
+                Marca = (String)parametros[0];
+                Cilindraje = Convert.ToInt16(parametros[1]);
+                Modelo = (String)parametros[2];
+                Descripcion = (String)parametros[3];
+                TonCapacidad = Convert.ToInt16(parametros[4]);
+                NumEjes = Convert.ToInt16(parametros[5]);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
+        }
+    }
+}
+
+
+clase 3
+namespace Concesionario
+{
+    interface IVehiculo
+    {
+        int Cilindraje
+        {
+            get;
+            set;
+        }
+        string Modelo
+        {
+            get;
+            set;
+        }
+        string Marca
+        {
+            get;
+            set;
+        }
+        string Descripcion{
+            get;
+            set;
+        }
+
+        string Describir();
+        bool Inicializar(Object [] parametros);
+    }
+}
+
+formulario 
+namespace Concesionario
+{
+    public partial class Principal : Form
+    {
+        List<IVehiculo> Vehiculos;        
+
+        public Principal()
+        {
+            InitializeComponent();
+            Vehiculos = new List<IVehiculo>();
+        }
+
+        private void Principal_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        public void limpiar() {
+            txtModelo.Text = txtMarca.Text = txtInfo2.Text = txtInfo1.Text = txtDescripcion.Text = txtCilindraje.Text = "";
+            SetVisibles(false);
+            cboTipo.ResetText();
+        }
+
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            Object [] parametros = new Object[7];
+            parametros[0] = txtMarca.Text;
+            parametros[1] = txtCilindraje.Text;
+            parametros[2] = txtModelo.Text;
+            parametros[3] = txtDescripcion.Text;
+            parametros[4] = txtInfo1.Text;
+            parametros[5] = txtInfo2.Text;
+            if (cboTipo.SelectedIndex == 0)
+            {
+                Automovil aux = new Automovil();
+                if (aux.Inicializar(parametros))
+                {
+                    Vehiculos.Add(aux);
+                    limpiar();
+                }
+                else
+                    MessageBox.Show("Error al insertar, revise los parametros");
+            }
+            else {
+                Camion aux = new Camion();
+                if(aux.Inicializar(parametros))
+                {
+                    Vehiculos.Add(aux);
+                    limpiar();
+                }
+                else
+                    MessageBox.Show("Error al insertar, revise los parametros");
+            }
+            cboSeleccion.Items.Add(parametros[0] + " " + parametros[2]);
+        }
+
+        private void cboTipo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cboTipo.SelectedIndex == 0)
+            {
+                lblAux1.Text = "Num Puertas";
+                lblAux2.Text = "Num Pasajeros";
+                SetVisibles(true);
+            }
+            else if (cboTipo.SelectedIndex == 1)
+            {
+                lblAux1.Text = "Capacidad";
+                lblAux2.Text = "Num Ejes";
+                SetVisibles(true);
+            }
+        }
+
+        private void btnCargar_Click(object sender, EventArgs e)
+        {
+            txtResultado.Text = Vehiculos[cboSeleccion.SelectedIndex].Describir();            
+        }
+
+        public void SetVisibles(bool vVisible) {
+            txtInfo1.Visible = txtInfo2.Visible = lblAux1.Visible = lblAux2.Visible = vVisible;
+        }
+    }
+}
